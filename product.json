@@ -1,0 +1,6 @@
+[
+    { "name": "Laptop", "price": "$1000", "description": "High-performance laptop with SSD." },
+    { "name": "Smartphone", "price": "$500", "description": "Latest 5G smartphone with AI camera." },
+    { "name": "Smartphone", "price": "$520", "description": "Latest 5G smartphone with AI camera." },
+    { "name": "SmartWatch", "price": "$550", "description": "Latest 5G SmartWatch with AI." }
+]

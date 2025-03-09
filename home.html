@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            width: 250px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .product-card button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .product-card button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        let products = [];
+        let wishlist = [];
+        let loggedIn = false;
+
+        function loadProducts() {
+            fetch('product.json')
+                .then(response => response.json())
+                .then(data => {
+                    products = data;
+                    displayProducts();
+                });
+        }
+
+        function displayProducts() {
+            let output = '';
+            products.forEach((product, index) => {
+                output += `<div class="product-card">
+                   
+                    <h3>${product.name}</h3>
+                    <p>Price: ${product.price}</p>
+                    <p>${product.description}</p>
+                    <button onclick="showDetails(${index})">Show Details</button>
+                    <button onclick="saveToWishlist(${index})">Save</button>
+                </div>`;
+            });
+            document.getElementById('productList').innerHTML = output;
+        }
+
+        function showDetails(index) {
+            let product = products[index];
+            document.getElementById('productDetails').innerHTML = `
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+                <p>Price: ${product.price}</p>
+            `;
+        }
+
+        function saveToWishlist(index) {
+            let product = products[index];
+            if (!wishlist.includes(product)) {
+                wishlist.push(product);
+                displayWishlist();
+            }
+        }
+
+        function displayWishlist() {
+            let output = '';
+            wishlist.forEach((product, index) => {
+                output += `<div class="product-card">
+                    
+                    <h3>${product.name}</h3>
+                    <p>Price: ${product.price}</p>
+                    <p>${product.description}</p>
+                </div>`;
+            });
+            document.getElementById('wishlist').innerHTML = output;
+        }
+
+        function login(event) {
+            event.preventDefault();
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+
+            if (username && password) {
+                loggedIn = true;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('productSection').style.display = 'block';
+                loadProducts();
+            } else {
+                alert('Please enter valid credentials');
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>E-commerce Website</h1>
+
+    <!-- Sign Up / Sign In Page -->
+    <div id="authSection">
+        <h2>Sign Up / Sign In</h2>
+        <form onsubmit="login(event)">
+            <input type="text" id="username" placeholder="Username" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- Product Section (Hidden by default) -->
+    <div id="productSection" style="display: none;">
+        <h2>Products</h2>
+        <div id="productList"></div>
+
+        <h2>Product Details</h2>
+        <div id="productDetails"></div>
+
+        <h2>Wish List</h2>
+        <div id="wishlist"></div>
+    </div>
+</body>
+
+</html>
